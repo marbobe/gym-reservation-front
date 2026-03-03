@@ -5,7 +5,7 @@ export interface Room {
     createdAt?: string;
 }
 
-export type ReservationStatus = 'acrive' | 'cancelled';
+export type ReservationStatus = 'active' | 'cancelled';
 
 export interface Reservation {
     id: number;
