@@ -3,9 +3,9 @@ import { MainLayout } from "./components/layout/MainLayout";
 import { RoomsPage } from "./pages/RoomsPage";
 import { ReservationsPage } from "./pages/ReservationsPage";
 
+
 const Dashboard = () => <h1 className="text-2xl font-bold">Bienvenido al alquiler de espacios de Gimnasio</h1>;
-
-
+const Calendario = () => <h1 className="text-2xl font-bold">Bienvenido al calendario de espacios de Gimnasio</h1>;
 
 function App(){
   return(
@@ -15,6 +15,7 @@ function App(){
             <Route index element={<Dashboard/>}/>
             <Route path="rooms" element={<RoomsPage/>}/>
             <Route path="reservations" element={<ReservationsPage/>} />
+            <Route path="calendar" element={<Calendario/>}/>
           </Route>
       </Routes>
     </BrowserRouter>

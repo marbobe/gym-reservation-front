@@ -1,32 +1,15 @@
-import { Fragment } from "react";
-import { Link, Outlet } from 'react-router-dom';
-import { LayoutDashboard, DoorOpen, CalendarDays } from 'lucide-react';
+import { Outlet } from 'react-router-dom';
+import { Sidebar } from "./Sidebar";
 
 export const MainLayout = () => {
     return(
-        <Fragment>
+        <div className="flex min-h-screen bg-stone-50 font-sans text-neutral-900 selection:bg-neutral-900 selection:text-white">
             {/* Sidebar */}
-            <aside>
-                <div>Gym reservation </div>
-                <nav>
-                    <Link to="/">
-                        <LayoutDashboard size={20}>Dashboard</LayoutDashboard>
-                    </Link>
-                    <Link to="/rooms">
-                        <DoorOpen size={20}>Salas</DoorOpen>
-                    </Link>
-                    <Link to="/reservations">
-                        <CalendarDays size={20}>Reservas</CalendarDays>
-                    </Link>
-                </nav>
-            </aside>
-
+            <Sidebar/>
             {/* Main Content */}
-            <main>
-                <div>
-                    <Outlet/>
-                </div>
+            <main className="flex-1 flex flex-col h-screen overflow-y-auto">
+                <Outlet/>
             </main>
-        </Fragment>
+        </div>
     )
 }
