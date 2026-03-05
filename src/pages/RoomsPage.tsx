@@ -1,27 +1,41 @@
 import { useRooms } from "../hooks/useRooms"
 import { Button } from "../components/ui/Button";
 import { Badge } from "../components/ui/Badge";
+import { RoomCard } from "../components/features/RoomCard";
 
 export const RoomsPage = () => {
 
     const { rooms, loading, error } = useRooms();
 
     if(loading){
-        return <p> Cargando salas...</p>
+        return (
+          <div className="flex justify-center items-center h-full">
+            <p className="font-sans text-xs uppercase tracking-[0.2em] text-neutral-400">Cargando espacios...</p>
+          </div>
+        );
     }
     if(error){
-        return <p style={{color: 'red'}}>{error}</p>;
+        return <p className="text-rose-900 bg-rose-50 p-4 border border-rose-200">{error}</p>;
     }
 
 
     return(
-        <div>
-            <h1>Nuestras salas</h1>
-            <ul>
+        <div className="p-8 md:p-12 max-w-7xl mx-auto w-full">
+            {/* Cabecera Editorial */}
+            <header className="flex justify-between items-end border-b border-neutral-200 pb-8 mb-12">
+                <div>
+                    <h1 className="font-serif text-5xl tracking-tight text-neutral-900">Nuestros Espacios</h1>
+                    <p className="font-sans text-neutral-500 mt-4 text-lg font-light">
+                        Ambientes diseñados para el rendimiento y la calma.
+                    </p>
+                </div>
+                <Button variant="secondary">Nuevo Espacio</Button>
+            </header>
+
+            {/* Grid */}
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {rooms.map((sala)=> (
-                    <li key={sala.id}>
-                        {sala.name} - capacidad: {sala.capacity} personas
-                    </li>
+                    <RoomCard key={sala.id} room={sala}/>
                 ))}
             </ul>
 
@@ -31,6 +45,7 @@ export const RoomsPage = () => {
 
             <Badge>Hola</Badge>
             <Badge status="cancelled">Adios</Badge>
+
 
                 <div className="min-h-screen bg-stone-50 p-8 md:p-16 font-sans text-neutral-900 selection:bg-neutral-900 selection:text-white">
       <div className="max-w-7xl mx-auto space-y-24">

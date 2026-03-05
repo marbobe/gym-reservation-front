@@ -3,6 +3,7 @@ export type ButtonVariant = 'primary' | 'secondary' | 'danger';
 
 export interface ButtonProps {
     children: React.ReactNode;
+    className?: string;
     onClick?: () => void;
     variant?: ButtonVariant;
     disabled?: boolean;
@@ -15,10 +16,10 @@ const diccionarioColores = {
     danger: "bg-rose-950 hover:bg-rose-900 text-white border border-rose-950"
 };
 
-export const Button = ({children, variant='primary', disabled = false, type = 'button', onClick}: ButtonProps) => {
+export const Button = ({children, className, variant='primary', disabled = false, type = 'button', onClick}: ButtonProps) => {
 
     return(
-        <button className={`px-8 py-4 font-sans text-xs uppercase tracking-[0.2em] font-medium transition-colors rounded-none 
+        <button className={` ${className} px-8 py-4 font-sans text-xs uppercase tracking-[0.2em] font-medium transition-colors rounded-none 
             ${diccionarioColores[variant]} ${disabled ? 'opacity-30 cursor-not-allowed' : ''}`}
             type={type}
             disabled={disabled} 

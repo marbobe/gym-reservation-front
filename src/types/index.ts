@@ -2,7 +2,11 @@ export interface Room {
     id: number;
     name: string;
     capacity: number;
+    pricePerHour: number;
+    description?: string;
+    imageUrl?: string;
     createdAt?: string;
+    className?: string;
 }
 
 export type ReservationStatus = 'active' | 'cancelled';
