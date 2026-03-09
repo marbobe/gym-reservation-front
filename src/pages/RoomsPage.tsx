@@ -2,10 +2,12 @@ import { useRooms } from "../hooks/useRooms"
 import { Button } from "../components/ui/Button";
 import { Badge } from "../components/ui/Badge";
 import { RoomCard } from "../components/features/RoomCard";
+import { useNavigate } from "react-router-dom";
 
 export const RoomsPage = () => {
 
     const { rooms, loading, error } = useRooms();
+    const navigate = useNavigate();
 
     if(loading){
         return (
@@ -29,7 +31,7 @@ export const RoomsPage = () => {
                         Ambientes diseñados para el rendimiento y la calma.
                     </p>
                 </div>
-                <Button variant="secondary">Nuevo Espacio</Button>
+                <Button variant="secondary" onClick={()=> navigate('/rooms/new')}>Nuevo Espacio</Button>
             </header>
 
             {/* Grid */}
