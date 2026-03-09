@@ -16,6 +16,7 @@ function App(){
             <Route index element={<Dashboard/>}/>
             <Route path="rooms" element={<RoomsPage/>}/>
             <Route path="rooms/new" element={<CreateRoomPage/>}/>
+            <Route path="rooms/edit/:id" element={<CreateRoomPage/>}/>
             <Route path="reservations" element={<ReservationsPage/>} />
             <Route path="calendar" element={<Calendario/>}/>
           </Route>

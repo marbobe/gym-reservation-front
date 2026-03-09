@@ -1,8 +1,11 @@
 import { Button } from "../ui/Button"
 import type { Room } from "../../types/index.ts"
 import { Badge } from "../ui/Badge.tsx";
+import { useNavigate } from "react-router-dom";
 
 export const RoomCard = ({room}: {room: Room}) => {
+
+    const navigate = useNavigate()
 
     return (
 
@@ -40,6 +43,7 @@ export const RoomCard = ({room}: {room: Room}) => {
                 {/* Zona de Botones */}
                 <div className="pt-6 border-t border-neutral-100 mt-auto">
                     <div className="w-full flex">
+                        <Button variant="secondary" className="w-full mr-8" onClick={()=> navigate(`/rooms/edit/${room.id}`)}>Editar</Button>
                         <Button variant="primary" className="w-full">Reservar</Button>
                     </div>
                 </div>
