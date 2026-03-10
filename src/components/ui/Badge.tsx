@@ -1,4 +1,4 @@
-export type BadgeStatus = 'active' | 'cancelled';
+export type BadgeStatus = 'active' | 'deleted';
 
 export interface BadgeProps {
     children: React.ReactNode;
@@ -7,7 +7,7 @@ export interface BadgeProps {
 
 const diccionarioEstados = {
     active: "bg-white text-neutral-900 border-neutral-200",
-    cancelled: "bg-neutral-950 text-white border-neutral-950"
+    deleted: "bg-neutral-950 text-white border-neutral-950"
 }
 
 export const Badge = ({children, status='active'}: BadgeProps) => {

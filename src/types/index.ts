@@ -1,3 +1,4 @@
+export type RoomStatus = 'active' | 'deleted';
 export interface Room {
     id: number;
     name: string;
@@ -7,6 +8,7 @@ export interface Room {
     imageUrl?: string;
     createdAt?: string;
     className?: string;
+    status: RoomStatus;
 }
 
 export type ReservationStatus = 'active' | 'cancelled';

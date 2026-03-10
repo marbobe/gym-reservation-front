@@ -1,105 +1,13 @@
-import { useEffect, useState } from "react";
 import { Button } from "../components/ui/Button";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useRoomForm } from "../hooks/useRoomForm";
 
 export const CreateRoomPage =  () => {
-    const navigate = useNavigate();
 
     const {id} =useParams();
-    const isEditMode = Boolean(id);
 
-    const [formData, setFormData ] = useState({name:"", capacity: 0, pricePerHour: 0, description: "", imageUrl: ""});
-
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
-    useEffect(() => {
-        if(isEditMode){
-            const fetchRoomData = async () => {
-                setLoading(true);
-                try{
-                    const response = await fetch(`http://localhost:4000/api/v1/rooms/${id}`);
-
-                    if (!response.ok) throw new Error("No se pudo cargar la sala");
-
-                    const data = await response.json();
-
-                    setFormData({
-                        name: data.name || "",
-                        capacity: data.capacity || 0,
-                        pricePerHour: data.pricePerHour || 0,
-                        description: data.description || "",
-                        imageUrl: data.imageUrl || ""
-                    });
-                } catch (err: any) {
-                    setError(err.message);
-                } finally {
-                    setLoading(false);
-                }
-            };
-
-            fetchRoomData();
-        }
-    }, [id, isEditMode]);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type } = e.target; 
-        
-        setFormData({
-            ...formData, 
-            [name]: type === 'number' ? (value === '' ? 0 : Number(value)) : value 
-        });
-    };
-
-   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
-        e.preventDefault(); 
-        setLoading(true); 
-        setError(null);
-        
-        try{
-            const url = isEditMode 
-                ? `http://localhost:4000/api/v1/rooms/${id}` 
-                : 'http://localhost:4000/api/v1/rooms';
-            
-            const method = isEditMode ? 'PUT' : 'POST';
-
-            const response = await fetch(url, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-
-            if (!response.ok) {
-                throw new Error("Error al guardar el espacio."); 
-            }
-
-            navigate('/rooms');
-
-        } catch (error: any) {
-            setError(error.message);
-        } finally {
-            setLoading(false); 
-        }
-    };
-
-    const handleDelete = async () => {
-        setLoading(true);
-        try {
-            const response = await fetch(`http://localhost:4000/api/v1/rooms/${id}`, {
-                method: 'DELETE',
-            });
-
-            if (!response.ok) throw new Error("Error al eliminar el espacio.");
-            
-            navigate('/rooms');
-        } catch (error: any) {
-            setError(error.message);
-            setLoading(false);
-            setShowDeleteConfirm(false); 
-        }
-    };
+    const { formData, loading, error, isEditMode, handleChange, handleSubmit, handleDelete} = useRoomForm(id);
+   
 
     if (loading && isEditMode && formData.name === "") {
         return (
@@ -126,20 +34,6 @@ export const CreateRoomPage =  () => {
             {error && (
                 <div className="mb-8 p-4 bg-rose-50 border border-rose-200 text-rose-900 font-sans text-sm">
                     {error}
-                </div>
-            )}
-
-            {/* Banner de Confirmación Eliminar */}
-            {showDeleteConfirm && (
-                <div className="mb-8 p-6 bg-neutral-50 border border-neutral-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div>
-                        <h4 className="font-serif text-xl text-neutral-900">¿Estás seguro?</h4>
-                        <p className="font-sans text-sm text-neutral-500">Esta acción no se puede deshacer y borrará permanentemente la sala.</p>
-                    </div>
-                    <div className="flex gap-4">
-                        <Button variant="secondary" onClick={() => setShowDeleteConfirm(false)}>Cancelar</Button>
-                        <Button variant="danger" onClick={handleDelete} disabled={loading}>Sí, Eliminar</Button>
-                    </div>
                 </div>
             )}
 
@@ -195,14 +89,19 @@ export const CreateRoomPage =  () => {
                                 type="button" 
                                 variant="danger" 
                                 disabled={loading}
-                                onClick={() => setShowDeleteConfirm(true)}
+                                onClick={() => handleDelete()}
                             >
-                                Eliminar Espacio
+                                {formData.status === 'deleted'? 'Habilitar Sala' : 'Deshabilitar Sala'}
                             </Button>
                         )}
                     </div>
 
-                        <Button type="submit" disabled={loading}>{loading ? 'Creando espacio...' : 'Guardar Espacio'}</Button>
+                        <Button type="submit" disabled={loading}>
+                            {loading 
+                                ? (isEditMode ? 'Guardando...' : 'Creando sala...') 
+                                : (isEditMode ? 'Guardar Cambios' : 'Guardar Sala')
+                            }
+                        </Button>
                     </div>
             </form>
         </div>
