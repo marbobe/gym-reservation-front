@@ -45,7 +45,7 @@ export const RoomCard = ({room}: {room: Room}) => {
                     <div className="w-full flex">
                         <Button variant="secondary" className="w-full mr-8" onClick={()=> navigate(`/rooms/edit/${room.id}`)}>Editar</Button>
                         
-                        <Button disabled={room.status==='deleted'} variant="primary" className="w-full">Reservar</Button>
+                        <Button disabled={room.status==='deleted'} variant="primary" className="w-full" onClick={()=> navigate(`/rooms/${room.id}/reserve`)}>Reservar</Button>
                     </div>
                 </div>
             </div>
