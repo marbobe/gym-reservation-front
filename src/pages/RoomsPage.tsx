@@ -46,7 +46,7 @@ export const RoomsPage = () => {
             <Button variant="secondary">Boton Secondary</Button>
 
             <Badge>Hola</Badge>
-            <Badge status="cancelled">Adios</Badge>
+            <Badge status="deleted">Adios</Badge>
 
 
                 <div className="min-h-screen bg-stone-50 p-8 md:p-16 font-sans text-neutral-900 selection:bg-neutral-900 selection:text-white">

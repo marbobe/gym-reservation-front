@@ -2,24 +2,30 @@ import { useParams, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { Button } from "../components/ui/Button";
 import { ReservationService } from "../services/reservation.service";
-import { RoomService } from "../services/room.service"; 
+import { RoomService } from "../services/room.service";
 import type { Room } from "../types";
+
+
+const AVAILABLE_HOURS = Array.from({ length: 16 }, (_, i) => {
+    const hour = i + 7; 
+    return `${hour.toString().padStart(2, '0')}:00`; 
+});
 
 export const CreateReservationPage = () => {
     const navigate = useNavigate();
-    const { id } = useParams(); 
+    const { id } = useParams();
     
     const [room, setRoom] = useState<Room | null>(null);
 
     const [formData, setFormData] = useState({
         userId: 0, 
-        startTime: "", 
-        endTime: ""
+        date: "",       // Ej: "2026-03-20"
+        startHour: "",  // Ej: "09:00"
+        endHour: ""     // Ej: "11:00"
     });
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
 
     useEffect(() => {
         if (id) {
@@ -35,7 +41,7 @@ export const CreateReservationPage = () => {
         }
     }, [id]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target; 
         
         setFormData(prev => ({
@@ -44,29 +50,50 @@ export const CreateReservationPage = () => {
         }));
     };
 
-   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); 
         setLoading(true);
         setError(null);
         
         try {
+
+            if (formData.startHour >= formData.endHour) {
+                throw new Error("La hora de fin debe ser posterior a la de inicio.");
+            }
+
+            const startDateTime = new Date(`${formData.date}T${formData.startHour}`);
+            const endDateTime = new Date(`${formData.date}T${formData.endHour}`);
+
             const payload = {
-                roomId: Number(id), 
+                roomId: Number(id),
                 userId: formData.userId,
-                startTime: new Date(formData.startTime).toISOString(), 
-                endTime: new Date(formData.endTime).toISOString(),
+                startTime: startDateTime.toISOString(),
+                endTime: endDateTime.toISOString(),
             };
 
             await ReservationService.create(payload);
             
-            navigate('/reservations');
+            navigate('/rooms');
 
         } catch (err: any) {
-            setError("Error al crear la reserva. " + (err.message || ""));
+            if (err.response) {
+                const backendMessage = err.response.data?.message || err.response.data?.error;
+                
+                if (backendMessage) {
+                    setError(`No se pudo reservar: ${backendMessage}`);
+                } else {
+                    setError("Hubo un problema con el servidor. Inténtalo de nuevo más tarde.");
+                }
+            } 
+            else {
+                setError(err.message || "Error de conexión al crear la reserva.");
+            }
         } finally {
             setLoading(false);
         }
     };
+
+    const today = new Date().toISOString().split('T')[0];
 
     return(
         <div className="p-8 md:p-16 max-w-3xl mx-auto w-full">
@@ -79,7 +106,7 @@ export const CreateReservationPage = () => {
                     {room ? room.name : 'Cargando espacio...'}
                 </h1>
                 <p className="font-sans text-neutral-500 text-lg font-light">
-                    Selecciona tu ID de usuario y la franja horaria que deseas bloquear.
+                    Selecciona el día y la franja horaria para tu sesión.
                 </p>
             </header>
 
@@ -90,10 +117,10 @@ export const CreateReservationPage = () => {
             )}
 
             <form onSubmit={handleSubmit} className="bg-white p-10 md:p-16 border border-neutral-200">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     
                     {/* ID de Usuario Ficticio */}
-                    <div className="md:col-span-2 relative">
+                    <div className="md:col-span-3 relative mb-6">
                         <label className="block text-[10px] font-semibold text-neutral-400 uppercase tracking-[0.2em] mb-3">
                             Número de Usuario (ID)
                         </label>   
@@ -109,41 +136,68 @@ export const CreateReservationPage = () => {
                         />
                     </div>
 
-                    {/* Fecha y Hora de Inicio */}
+                    {/* Selector de Fecha */}
                     <div className="relative">
                         <label className="block text-[10px] font-semibold text-neutral-400 uppercase tracking-[0.2em] mb-3">
-                            Fecha y hora de inicio
+                            Fecha
                         </label>
                         <input 
-                            name="startTime" 
-                            type="datetime-local" 
-                            value={formData.startTime} 
+                            name="date" 
+                            type="date" 
+                            min={today} // Bloquea fechas anteriores a hoy
+                            value={formData.date} 
                             onChange={handleChange} 
                             required
                             className="w-full bg-transparent border-0 border-b border-neutral-200 px-0 py-2 text-neutral-900 font-sans text-base focus:outline-none focus:ring-0 focus:border-neutral-950 transition-colors"
                         />
                     </div>
 
-                    {/* Fecha y Hora de Fin */}
+                    {/* Selector de Hora Inicio */}
                     <div className="relative">
                         <label className="block text-[10px] font-semibold text-neutral-400 uppercase tracking-[0.2em] mb-3">
-                            Fecha y hora de fin
+                            Hora Inicio
                         </label>
-                        <input 
-                            name="endTime" 
-                            type="datetime-local" 
-                            value={formData.endTime} 
+                        <select 
+                            name="startHour" 
+                            value={formData.startHour} 
                             onChange={handleChange} 
                             required
-                            className="w-full bg-transparent border-0 border-b border-neutral-200 px-0 py-2 text-neutral-900 font-sans text-base focus:outline-none focus:ring-0 focus:border-neutral-950 transition-colors"
-                        />
+                            className="w-full bg-transparent border-0 border-b border-neutral-200 px-0 py-2 text-neutral-900 font-sans text-base focus:outline-none focus:ring-0 focus:border-neutral-950 transition-colors cursor-pointer"
+                        >
+                            <option value="" disabled>Selecciona...</option>
+                            {AVAILABLE_HOURS.map(hour => (
+                                <option key={`start-${hour}`} value={hour}>{hour}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Selector de Hora Fin */}
+                    <div className="relative">
+                        <label className="block text-[10px] font-semibold text-neutral-400 uppercase tracking-[0.2em] mb-3">
+                            Hora Fin
+                        </label>
+                        <select 
+                            name="endHour" 
+                            value={formData.endHour} 
+                            onChange={handleChange} 
+                            required
+                            className="w-full bg-transparent border-0 border-b border-neutral-200 px-0 py-2 text-neutral-900 font-sans text-base focus:outline-none focus:ring-0 focus:border-neutral-950 transition-colors cursor-pointer"
+                        >
+                            <option value="" disabled>Selecciona...</option>
+                            {AVAILABLE_HOURS.map(hour => (
+                                <option key={`end-${hour}`} value={hour}>{hour}</option>
+                            ))}
+                        </select>
                     </div>
                 </div>
                 
-                <div className="mt-16 pt-8 border-t border-neutral-100 flex justify-end">
+                <div className="mt-16 flex md:flex-row justify-between gap-4">
+                    <Button variant="secondary" onClick={()=> navigate('/rooms')}> Cancelar </Button>
+
                     <Button type="submit" disabled={loading}> 
                         {loading ? 'Procesando...' : 'Confirmar Reserva'}
                     </Button>
+                    
                 </div>
             </form>
         </div>
