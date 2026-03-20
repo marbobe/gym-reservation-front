@@ -4,10 +4,12 @@ import { RoomsPage } from "./pages/RoomsPage";
 import { ReservationsPage } from "./pages/ReservationsPage";
 import { CreateRoomPage } from "./pages/CreateRoomPage";
 import { CreateReservationPage } from "./pages/CreateReservationPage";
+import { Calendario } from "./pages/Calendario"
+import { Dashboard } from "./pages/Dashboard";
 
 
-const Dashboard = () => <h1 className="text-2xl font-bold">Bienvenido al alquiler de espacios de Gimnasio</h1>;
-const Calendario = () => <h1 className="text-2xl font-bold">Bienvenido al calendario de espacios de Gimnasio</h1>;
+//const Dashboard = () => <h1 className="text-2xl font-bold">Bienvenido al alquiler de espacios de Gimnasio</h1>;
+//const Calendario = () => <h1 className="text-2xl font-bold">Bienvenido al calendario de espacios de Gimnasio</h1>;
 
 function App(){
   return(
@@ -15,11 +17,17 @@ function App(){
       <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Dashboard/>}/>
+
+            {/* Rutas de Salas */}
             <Route path="rooms" element={<RoomsPage/>}/>
             <Route path="rooms/new" element={<CreateRoomPage/>}/>
-            <Route path="rooms/edit/:id" element={<CreateRoomPage/>}/>
-            <Route path="rooms/:id/reserve" element={<CreateReservationPage />} />
+            <Route path="rooms/:id/edit" element={<CreateRoomPage/>}/>
+
+            {/* Rutas de Reservas */}
             <Route path="reservations" element={<ReservationsPage/>} />
+            <Route path="rooms/:id/reserve" element={<CreateReservationPage />} />
+            <Route path="reservations/:id/edit" element={<CreateReservationPage />} />
+
             <Route path="calendar" element={<Calendario/>}/>
           </Route>
       </Routes>

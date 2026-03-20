@@ -23,3 +23,5 @@ export interface Reservation {
     createdAt: string;
     room?: Room;
 }
+
+export type UpdateReservationDTO = Partial<Omit<Reservation, 'id' | 'status'>>;

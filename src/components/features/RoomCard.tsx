@@ -43,7 +43,7 @@ export const RoomCard = ({room}: {room: Room}) => {
                 {/* Zona de Botones */}
                 <div className="pt-6 border-t border-neutral-100 mt-auto">
                     <div className="w-full flex">
-                        <Button variant="secondary" className="w-full mr-8" onClick={()=> navigate(`/rooms/edit/${room.id}`)}>Editar</Button>
+                        <Button variant="secondary" className="w-full mr-8" onClick={()=> navigate(`/rooms/${room.id}/edit`)}>Editar</Button>
                         
                         <Button disabled={room.status==='deleted'} variant="primary" className="w-full" onClick={()=> navigate(`/rooms/${room.id}/reserve`)}>Reservar</Button>
                     </div>
