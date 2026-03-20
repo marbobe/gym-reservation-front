@@ -1,11 +1,17 @@
+export type RoomStatus = 'active' | 'deleted';
 export interface Room {
     id: number;
     name: string;
     capacity: number;
+    pricePerHour: number;
+    description?: string;
+    imageUrl?: string;
     createdAt?: string;
+    className?: string;
+    status: RoomStatus;
 }
 
-export type ReservationStatus = 'acrive' | 'cancelled';
+export type ReservationStatus = 'active' | 'cancelled';
 
 export interface Reservation {
     id: number;
@@ -17,3 +23,5 @@ export interface Reservation {
     createdAt: string;
     room?: Room;
 }
+
+export type UpdateReservationDTO = Partial<Omit<Reservation, 'id' | 'status'>>;
