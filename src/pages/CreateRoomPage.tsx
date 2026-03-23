@@ -1,11 +1,11 @@
 import { Button } from "../components/ui/Button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useRoomForm } from "../hooks/useRoomForm";
 
 export const CreateRoomPage =  () => {
 
     const {id} =useParams();
-
+    const navigate = useNavigate();
     const { formData, loading, error, isEditMode, handleChange, handleSubmit, handleDelete} = useRoomForm(id);
    
 
@@ -81,27 +81,37 @@ export const CreateRoomPage =  () => {
                     </div>
                 </div>
 
-                    <div className="mt-16 flex md:flex-row justify-between gap-4">
+                    <div className="mt-16 flex md:flex-row justify-end gap-8">
                        <div>
-                        {isEditMode && (
+                            {isEditMode && (
 
-                            <Button 
-                                type="button" 
-                                variant="danger" 
-                                disabled={loading}
-                                onClick={() => handleDelete()}
-                            >
-                                {formData.status === 'deleted'? 'Habilitar Sala' : 'Deshabilitar Sala'}
+                                <Button 
+                                    type="button" 
+                                    variant="danger" 
+                                    disabled={loading}
+                                    onClick={() => handleDelete()}
+                                >
+                                    {formData.status === 'deleted'? 'Habilitar Sala' : 'Deshabilitar Sala'}
+                                </Button>
+                                
+                            )}
+                        </div >
+                        <div className="gap-4">
+                            <Button variant='secondary' onClick={()=> navigate (-1)}>
+                                Volver
                             </Button>
-                        )}
-                    </div>
+                        </div>
 
-                        <Button type="submit" disabled={loading}>
-                            {loading 
-                                ? (isEditMode ? 'Guardando...' : 'Creando sala...') 
-                                : (isEditMode ? 'Guardar Cambios' : 'Guardar Sala')
-                            }
-                        </Button>
+                        <div>
+                            <Button type="submit" disabled={loading}>
+                                {loading 
+                                    ? (isEditMode ? 'Guardando...' : 'Creando sala...') 
+                                    : (isEditMode ? 'Guardar Cambios' : 'Guardar Sala')
+                                }
+                            </Button>
+                        </div>
+                        
+                        
                     </div>
             </form>
         </div>
