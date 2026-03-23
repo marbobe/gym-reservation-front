@@ -1,5 +1,4 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, DoorOpen, CalendarDays, List } from 'lucide-react';
 
 export const Sidebar = () => {
  
@@ -11,6 +10,13 @@ export const Sidebar = () => {
     { path: '/calendar', label: 'Calendario' },
     { path: '/reservations', label: 'Reservas' },
   ];
+
+   const today = new Date().toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 
   return (
     <aside className="w-64 min-h-screen bg-neutral-950 flex flex-col border-r border-neutral-900">
@@ -49,6 +55,12 @@ export const Sidebar = () => {
           );
         })}
       </nav>
+
+      <div className="px-4 mb-4">
+        <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">
+                        {today}
+        </p>
+      </div>
 
       {/* Zona del Usuario */}
       <div className="p-4 border-t border-neutral-900">

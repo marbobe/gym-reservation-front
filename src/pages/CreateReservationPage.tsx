@@ -20,9 +20,6 @@ export const CreateReservationPage = () => {
 
     const [initialLoading, setInitialLoading] = useState(isEditMode);
 
-    console.log("¿Estamos editando?", isEditMode);
-    console.log("ID capturado de la URL:", id);
-
     const [room, setRoom] = useState<Room | null>(null);
 
     const [formData, setFormData] = useState({
@@ -270,7 +267,7 @@ export const CreateReservationPage = () => {
                     </div>
                 </div>
                 
-                <div className="mt-16 flex md:flex-row justify-between gap-4">
+                <div className="mt-16 flex md:flex-row justify-end gap-8">
                     <div>
                         {isEditMode && !isCancelled &&(
                             <Button 
@@ -282,9 +279,16 @@ export const CreateReservationPage = () => {
                                 Cancelar Reserva
                             </Button>
                         )}
+                       
+                    </div>
+                    <div className="flex gap-4">
+                          <Button variant='secondary' onClick={()=> navigate (-1)}>
+                            Volver
+                        </Button>
                     </div>
 
                     <div className="flex gap-4">
+                                                                    
                         {!isCancelled && (
                             <Button type="submit" disabled={loading}> 
                                 {loading 
@@ -292,6 +296,7 @@ export const CreateReservationPage = () => {
                                     : (isEditMode ? 'Guardar Cambios' : 'Confirmar Reserva')}
                             </Button>
                         )}
+            
                     </div>
                 </div>
             </form>

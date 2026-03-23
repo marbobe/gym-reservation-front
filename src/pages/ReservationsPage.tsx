@@ -4,6 +4,7 @@ import { RoomService } from "../services/room.service";
 import type { Room } from "../types";
 import { Badge } from "../components/ui/Badge";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../components/ui/Button";
 
 export const ReservationsPage = () => {
     const {reservations, loading, error} = useReservations();
@@ -160,6 +161,7 @@ export const ReservationsPage = () => {
                                         >
                                             Editar
                                         </button>
+                                        
                                     </td>
                                 </tr>
                             ))
