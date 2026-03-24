@@ -25,6 +25,7 @@ function App(){
 
             {/* Rutas de Reservas */}
             <Route path="reservations" element={<ReservationsPage/>} />
+            <Route path="/reservations/new" element={<CreateReservationPage />} />
             <Route path="rooms/:id/reserve" element={<CreateReservationPage />} />
             <Route path="reservations/:id/edit" element={<CreateReservationPage />} />
 

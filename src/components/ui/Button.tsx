@@ -19,7 +19,7 @@ const diccionarioColores = {
 export const Button = ({children, className, variant='primary', disabled = false, type = 'button', onClick}: ButtonProps) => {
 
     return(
-        <button className={` ${className} px-8 py-4 font-sans text-xs uppercase tracking-[0.2em] font-medium transition-colors rounded-none 
+        <button className={` ${className} px-8 py-4 font-sans text-xs uppercase tracking-[0.2em] font-medium transition-colors rounded-none cursor-pointer
             ${diccionarioColores[variant]} ${disabled ? 'opacity-30 cursor-not-allowed' : ''}`}
             type={type}
             disabled={disabled} 
