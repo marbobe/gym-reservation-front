@@ -3,7 +3,7 @@ import { useReservations } from "../hooks/useReservations";
 import { RoomService } from "../services/room.service";
 import type { Room } from "../types";
 import { Badge } from "../components/ui/Badge";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 
 export const ReservationsPage = () => {
@@ -55,10 +55,14 @@ export const ReservationsPage = () => {
 
 
     if(loading){
-        return <p>Cargando reservas ...</p>
+        return (
+          <div className="flex justify-center items-center h-full">
+            <p className="font-sans text-xs uppercase tracking-[0.2em] text-neutral-400">Cargando reservas...</p>
+          </div>
+        );
     }
     if(error){
-        return <p style={{color: 'red'}}>{error}</p>;
+       return <p className="text-rose-900 bg-rose-50 p-4 border border-rose-200">{error}</p>;
     }
 
     return(
@@ -109,7 +113,13 @@ export const ReservationsPage = () => {
                             ))}
                         </select>
                     </div>
+                    
                 </div>
+                <div className="flex flex-col">
+                        <Link to="/reservations/new">
+                            <Button variant="secondary">Nueva Reserva</Button>
+                        </Link>
+                    </div>
             </header>
 
             {/* LA TABLA */}
@@ -152,11 +162,12 @@ export const ReservationsPage = () => {
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <button 
+                                            disabled={(reserva.status === "cancelled")}
                                             onClick={() => navigate(`/reservations/${reserva.id}/edit`)}
                                             className={`inline-flex items-center justify-center px-3 py-1.5 font-sans text-xs uppercase tracking-[0.2em] font-medium transition-colors rounded-none border ${
                                                 reserva.status === 'cancelled' 
-                                                    ? 'bg-neutral-200 text-neutral-400 border-neutral-200 cursor-not-allowed'
-                                                    : 'bg-rose-950 hover:bg-rose-900 text-white border-rose-950'
+                                                    ? 'bg-neutral-200 text-neutral-400 border-neutral-200 cursor-not-allowed' 
+                                                    : 'bg-rose-950 hover:bg-rose-900 text-white border-rose-950 cursor-pointer'
                                             }`}
                                         >
                                             Editar

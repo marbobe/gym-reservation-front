@@ -21,8 +21,10 @@ export const CreateReservationPage = () => {
     const [initialLoading, setInitialLoading] = useState(isEditMode);
 
     const [room, setRoom] = useState<Room | null>(null);
+    const [rooms, setRooms] = useState<Room[]>([]);
 
     const [formData, setFormData] = useState({
+        roomId: "",
         userId: 0, 
         date: "",       
         startHour: "",  
@@ -34,9 +36,8 @@ export const CreateReservationPage = () => {
 
     useEffect(() => {
         const loadInitialData = async () => {
-            if (!id) return;
             try{
-                if (isEditMode){
+                if (isEditMode && id){
                     const reservation = await ReservationService.getById(id);
                     setReservationStatus(reservation.status);
 
@@ -47,15 +48,21 @@ export const CreateReservationPage = () => {
                     const endDate = new Date(reservation.endTime);
 
                     setFormData({
+                        roomId: reservation.roomId.toString(),
                         userId: reservation.userId,
                         date: startDate.toISOString().split('T')[0], 
                         startHour: `${startDate.getHours().toString().padStart(2, '0')}:00`, 
                         endHour: `${endDate.getHours().toString().padStart(2, '0')}:00`
                     });
-                }else {
+                }else if (id){
                     //MODO CREACIÓN
                     const roomData = await RoomService.getById(id);
                     setRoom(roomData);
+                    setFormData(prev => ({ ...prev, roomId: id}));
+                }else{
+                    //MODO CREACIÓN GLOBAL
+                    const allRooms = await RoomService.getAll();
+                    setRooms(allRooms);
                 }
             } catch (err){
                 console.error("Error al cargar los datos: ", err);
@@ -104,13 +111,13 @@ export const CreateReservationPage = () => {
             } else {
 
                 const createPayload = {
-                    roomId: Number(id),
+                    roomId: Number(formData.roomId),
                     userId: formData.userId,
                     startTime: startDateTime.toISOString(),
                     endTime: endDateTime.toISOString(),
                 };
                 await ReservationService.create(createPayload);
-                navigate('/rooms');
+                navigate('/reservations');
             }
 
         } catch (err: any) {
@@ -167,7 +174,7 @@ export const CreateReservationPage = () => {
                     {isEditMode ? 'Editar Reserva' : 'Nueva Reserva'}
                 </p>
                 <h1 className="font-serif text-5xl tracking-tight text-neutral-900 mb-4">
-                    {room ? room.name : 'Cargando espacio...'}
+                    {room ? room.name : 'Reserva General'}
                 </h1>
                 <p className="font-sans text-neutral-500 text-lg font-light">
                     {isEditMode 
@@ -190,7 +197,33 @@ export const CreateReservationPage = () => {
 
             <form onSubmit={handleSubmit} className="bg-white p-10 md:p-16 border border-neutral-200">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    
+                    {/* Selector de Espacio (Sala) */}
+                    <div className="md:col-span-3 relative mb-6">
+                        <label className="block text-[10px] font-semibold text-neutral-400 uppercase tracking-[0.2em] mb-3">
+                            Espacio Deportivo
+                        </label>
+                        {room ? (
+
+                            <p className="w-full bg-transparent border-0 border-b border-neutral-200 px-0 py-2 text-neutral-900 font-serif text-2xl">
+                                {room.name}
+                            </p>
+                        ) : (
+
+                            <select 
+                                name="roomId" 
+                                value={formData.roomId} 
+                                onChange={handleChange} 
+                                required
+                                disabled={isCancelled}
+                                className="w-full bg-transparent border-0 border-b border-neutral-200 px-0 py-2 text-neutral-900 font-serif text-2xl focus:outline-none focus:ring-0 focus:border-neutral-950 transition-colors cursor-pointer"
+                            >
+                                <option value="" disabled>Selecciona un espacio...</option>
+                                {rooms.map(r => (
+                                    <option key={r.id} value={r.id}>{r.name}</option>
+                                ))}
+                            </select>
+                        )}
+                    </div>
                     {/* ID de Usuario Ficticio */}
                     <div className="md:col-span-3 relative mb-6">
                         <label className="block text-[10px] font-semibold text-neutral-400 uppercase tracking-[0.2em] mb-3">
