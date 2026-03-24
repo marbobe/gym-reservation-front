@@ -2,12 +2,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { Badge } from "../components/ui/Badge";
 import { Button } from "../components/ui/Button";
 import { useReservations } from "../hooks/useReservations";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useRooms } from "../hooks/useRooms";
+import { databaseService } from "../services/database.service";
 
 export const Dashboard = () => {
 
     const navigate = useNavigate();
+
+    const [isReseting, setIsReseting] = useState<boolean>(false);
 
     const {reservations, loading, error } = useReservations();
     const {rooms} = useRooms();
@@ -101,6 +104,24 @@ export const Dashboard = () => {
 
     }, [reservations])
 
+    const handleResetDatabase = async ()=>{
+        const confirmacion = window.confirm("¿Estás absolutamente seguro de que quieres borrar todos los datos y reiniciar la BBDD? Esta acción no se puede deshacer.");
+        if (!confirmacion) {
+            return; 
+        }
+        
+        try{
+            setIsReseting(true);
+            await databaseService.reset();
+            window.location.reload();
+        } catch (err){
+            console.error("Error en el reset:", err);
+            alert('Hubo un error al resetear la base de datos. Revisa la consola.');
+        }finally{
+            setIsReseting(false);
+        }
+    }
+
     if(loading){
         return (
           <div className="flex justify-center items-center h-full">
@@ -140,8 +161,8 @@ export const Dashboard = () => {
                       <p className="text-s text-neutral-500 font-light mb-4">
                           Devuelve la API a su estado original de forma segura.
                       </p>
-                      <Button variant="danger">
-                          Restablecer BBDD
+                      <Button disabled={isReseting} variant="danger" onClick={handleResetDatabase}>
+                          {isReseting ? `Restableciendo...` : `Restablecer BBDD`}
                       </Button>
                   </div>
               </div>

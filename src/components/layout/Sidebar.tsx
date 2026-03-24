@@ -22,10 +22,13 @@ export const Sidebar = () => {
     <aside className="w-64 min-h-screen bg-neutral-950 flex flex-col border-r border-neutral-900">
       
       {/* Logo */}
-      <div className="h-24 flex items-center px-8 border-b border-neutral-900">
-        <h2 className="font-serif text-2xl text-white tracking-tight">
+      <div className="pt-10 pb-8 px-8 border-b border-neutral-900">
+        <h2 className="font-serif text-3xl text-white tracking-tight leading-none mb-6">
           Gym<span className="text-neutral-500 italic">Reservation</span>
         </h2>
+         <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">
+                        {today}
+        </p>
       </div>
 
       {/* Navegación */}
@@ -57,20 +60,18 @@ export const Sidebar = () => {
       </nav>
 
       <div className="px-4 mb-4">
-        <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">
-                        {today}
-        </p>
+       
       </div>
 
       {/* Zona del Usuario */}
       <div className="p-4 border-t border-neutral-900">
         <div className="px-4 py-3 flex items-center gap-3">
-          <div className="w-8 h-8 bg-neutral-800 rounded-none flex items-center justify-center text-xs text-white font-serif">
+          <div className="w-10 h-10 bg-neutral-800 rounded-none flex items-center justify-center text-s text-white font-serif">
             AD
           </div>
           <div className="flex flex-col">
             <span className="text-xs text-white uppercase tracking-widest">Admin</span>
-            <span className="text-[10px] text-neutral-500 font-serif italic">Studio Manager</span>
+            <span className="text-[14px] text-neutral-500 font-serif italic">Studio Manager</span>
           </div>
         </div>
       </div>
