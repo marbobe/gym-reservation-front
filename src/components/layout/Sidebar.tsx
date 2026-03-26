@@ -38,7 +38,6 @@ export const Sidebar = () => {
         </p>
 
         {menuItems.map((item) => {
-          // Comprobamos si la ruta actual coincide con la del botón
           const isActive = location.pathname === item.path;
 
           return (
@@ -48,8 +47,8 @@ export const Sidebar = () => {
               className={`
                 px-4 py-3 text-xs uppercase tracking-[0.2em] transition-colors font-medium
                 ${isActive 
-                  ? 'bg-white text-neutral-950' // Activo: Fondo blanco, texto negro (Alto contraste)
-                  : 'text-neutral-400 hover:text-white hover:bg-neutral-900' // Inactivo: Gris, al pasar el ratón se ilumina
+                  ? 'bg-white text-neutral-950' 
+                  : 'text-neutral-400 hover:text-white hover:bg-neutral-900'
                 }
               `}
             >
