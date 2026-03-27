@@ -1,23 +1,18 @@
-import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useReservations } from '../hooks/useReservations';
+import { Calendar } from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Button } from '../components/ui/Button';
+import { type CalendarEvent } from '../types';
 
-import { Calendar, dateFnsLocalizer, type View } from 'react-big-calendar';
+import { dateFnsLocalizer} from 'react-big-calendar';
 import { format } from 'date-fns/format';
 import { parse } from 'date-fns/parse';
 import { startOfWeek } from 'date-fns/startOfWeek';
 import { getDay } from 'date-fns/getDay';
 import { es } from 'date-fns/locale/es';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-import { Button } from '../components/ui/Button';
+import { useCalendarLogic } from '../hooks/useCalendarLogic';
 
-interface CalendarEvent {
-    id: number | string;
-    title: string;
-    start: Date;
-    end: Date;
-}
 
 const locales = { 'es': es };
 
@@ -62,27 +57,8 @@ const eventStyleGetter = (event: CalendarEvent, start: Date, end: Date, isSelect
 };
 
 export const Calendario = () => {
-    const { reservations, loading, error } = useReservations();
     const navigate = useNavigate();
-
-    const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
-    const [currentDate, setCurrentDate] = useState(new Date());
-    const [currentView, setCurrentView] = useState<View>('month');
-
-    const calendarEvents: CalendarEvent[] = useMemo(() => {
-        if (!reservations) return [];
-
-        return reservations
-            .filter(reserva => reserva.status === 'active')
-            .map(reserva => ({
-                id: reserva.id, 
-                title: `${reserva.room?.name} (Usuario: ${reserva.userId})`, 
-                start: new Date(reserva.startTime),
-                end: new Date(reserva.endTime),
-            }));
-    }, [reservations]);
-
-    const isPastEvent = selectedEvent ? selectedEvent.end.getTime() < new Date().getTime() : false;
+    const { selectedEvent, setSelectedEvent, currentDate, setCurrentDate, currentView, setCurrentView, loading, error, isPastEvent, calendarEvents } = useCalendarLogic();
 
     if (loading) { 
         return (

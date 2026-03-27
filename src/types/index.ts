@@ -25,3 +25,10 @@ export interface Reservation {
 }
 
 export type UpdateReservationDTO = Partial<Omit<Reservation, 'id' | 'status'>>;
+
+export interface CalendarEvent {
+    id: number | string;
+    title: string;
+    start: Date;
+    end: Date;
+}
