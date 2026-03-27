@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { useReservations } from "./useReservations";
 import { useRooms } from "./useRooms";
+import { useState } from "react";
+import { databaseService } from "../services/database.service";
 
 
 export const useDashboardStats = () =>{
@@ -9,6 +11,26 @@ export const useDashboardStats = () =>{
 
     const isLoading = loadingRes || loadingRooms;
     const hasError = errorRes || errorRooms;
+
+    const [isReseting, setIsReseting] = useState<boolean>(false);
+
+    const handleResetDatabase = async ()=>{
+        const confirmacion = window.confirm("¿Estás absolutamente seguro de que quieres borrar todos los datos y reiniciar la BBDD? Esta acción no se puede deshacer.");
+        if (!confirmacion) {
+            return; 
+        }
+        
+        try{
+            setIsReseting(true);
+            await databaseService.reset();
+            window.location.reload();
+        } catch (err){
+            console.error("Error en el reset:", err);
+            alert('Hubo un error al resetear la base de datos. Revisa la consola.');
+        }finally{
+            setIsReseting(false);
+        }
+    }
 
     const totalHorasReservadas = useMemo(() => {
             if(!reservations) return 0;
@@ -99,5 +121,5 @@ export const useDashboardStats = () =>{
 
     }, [reservations])
 
-    return {loading: isLoading, error: hasError, totalHorasReservadas, estadisticasHoy, salaMasDemandada, proximasReservas }
+    return {loading: isLoading, error: hasError, totalHorasReservadas, estadisticasHoy, salaMasDemandada, proximasReservas, isReseting, handleResetDatabase }
 }

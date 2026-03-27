@@ -1,58 +1,13 @@
-import { useEffect, useState } from "react";
-import { useReservations } from "../hooks/useReservations";
-import { RoomService } from "../services/room.service";
-import type { Room } from "../types";
+
 import { Badge } from "../components/ui/Badge";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
+import { useReservationLogic } from "../hooks/useReservationsLogic";
 
 export const ReservationsPage = () => {
-    const {reservations, loading, error} = useReservations();
-
     const navigate = useNavigate();
 
-    const [rooms, setRooms] = useState<Room[]>([]);
-    const [selectedRoomId, setSelectedRoomId] = useState<string>("all");
-    const [timeFilter, setTimeFilter] =useState<string>("pending");
-
-    useEffect(()=>{
-        const fetchRooms = async () => {
-            try{
-                const data = await RoomService.getAll();
-                setRooms(data);
-            }catch (err){
-                console.error("Error al cargar las salas para el filtro", err);
-            }
-        };
-        fetchRooms();
-    }, []);
-
-    const filteredAndSortedReservations = reservations
-        .filter((reserva) => {
-            const matchesRoom = selectedRoomId === "all" || String(reserva.roomId) === selectedRoomId;
-
-            let matchesTime = true;
-
-            if (timeFilter !== "all"){
-                const now = new Date().getTime(); 
-                const endTime = new Date(reserva.endTime).getTime(); 
-            
-                const isFinished = endTime < now;
-                if (timeFilter === "pending"){
-                    matchesTime = !isFinished;
-                }else if (timeFilter === "finished"){
-                    matchesTime = isFinished;
-                }
-            }
-
-            return matchesRoom && matchesTime;
-        })
-        .sort((a, b) => {
-            const dateA = new Date(a.startTime).getTime();
-            const dateB = new Date(b.startTime).getTime();
-            return dateA - dateB;
-        })
-
+    const { rooms, selectedRoomId, setSelectedRoomId, timeFilter, setTimeFilter, filteredAndSortedReservations, loading, error} = useReservationLogic();
 
     if(loading){
         return (
