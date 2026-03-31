@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 export const Sidebar = () => {
  
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
     { path: '/', label: 'Dashboard' },
@@ -11,15 +13,20 @@ export const Sidebar = () => {
     { path: '/reservations', label: 'Reservas' },
   ];
 
-   const today = new Date().toLocaleDateString('es-ES', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
+  const today = new Date().toLocaleDateString('es-ES', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+  });
 
+  const handleClick = () => {
+    setIsOpen(false);
+  }
+  
   return (
-    <aside className="w-64 min-h-screen bg-neutral-950 flex flex-col border-r border-neutral-900">
+    <>
+    <aside className="w-64 min-h-screen bg-neutral-950 flex flex-col border-r border-neutral-900 hidden lg:flex">
       
       {/* Logo */}
       <div className="pt-10 pb-8 px-8 border-b border-neutral-900">
@@ -27,7 +34,7 @@ export const Sidebar = () => {
           Gym<span className="text-neutral-500 italic">Reservation</span>
         </h2>
          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">
-                        {today}
+            {today}
         </p>
       </div>
 
@@ -38,7 +45,7 @@ export const Sidebar = () => {
         </p>
 
         {menuItems.map((item) => {
-          const isActive = location.pathname === item.path;
+          const isActive = item.path === '/' ? location.pathname === '/' : location.pathname.startsWith(item.path);
 
           return (
             <Link
@@ -76,5 +83,40 @@ export const Sidebar = () => {
       </div>
 
     </aside>
+    <div className='lg:hidden bg-neutral-950 '>
+      <button className='text-white relative mx-auto max-w-7xl px-2' onClick={()=> setIsOpen(!isOpen)} > 
+        <h2 className="font-serif text-2xl text-white tracking-tight mt-2 leading-none mb-2">
+         ☰ Gym<span className="text-neutral-500 italic">Reservation</span>  
+        </h2> 
+      </button>
+    </div>
+     {isOpen && (
+        <div className="lg:hidden absolute  z-80 w-full bg-white">
+          <div className='lg:hidden flex flex-col'>
+
+          {menuItems.map((item) => {
+            const isActive = item.path === '/' ? location.pathname === '/' : location.pathname.startsWith(item.path);
+
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => handleClick()}
+                className={`
+                  px-4 py-3 text-xs uppercase tracking-[0.2em] transition-colors font-medium text-center
+                  ${isActive 
+                    ? 'bg-white text-neutral-950' 
+                    : 'text-neutral-400 hover:text-white hover:bg-neutral-900'
+                  }
+                `}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+          </div>
+        </div>
+      )}
+    </>
   );
 };

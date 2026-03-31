@@ -22,7 +22,7 @@ export const ReservationsPage = () => {
 
     return(
         <div className="p-8 md:p-12 max-w-7xl mx-auto w-full">
-            <header className="border-b border-neutral-200 pb-10 mb-8 flex justify-between items-end">
+            <header className="border-b border-neutral-200 pb-10 mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-6">
                 <div>
                     <h1 className="font-serif text-5xl tracking-tight text-neutral-900 mb-2">
                         Gestión de Reservas
@@ -33,7 +33,7 @@ export const ReservationsPage = () => {
                 </div>
 
                 {/* EL FILTRO */}
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
                     {/* Filtro de Tiempo */}
                     <div className="flex flex-col">
                         <label className="text-[10px] font-semibold text-neutral-400 uppercase tracking-[0.2em] mb-2">
@@ -70,9 +70,9 @@ export const ReservationsPage = () => {
                     </div>
                     
                 </div>
-                <div className="flex flex-col">
-                        <Link to="/reservations/new">
-                            <Button variant="secondary">Nueva Reserva</Button>
+                <div className="flex flex-col w-full md:w-auto">
+                        <Link to="/reservations/new" className="w-full">
+                            <Button variant="secondary" className="w-full">Nueva Reserva</Button>
                         </Link>
                     </div>
             </header>

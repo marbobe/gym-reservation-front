@@ -73,7 +73,7 @@ export const Calendario = () => {
     }
 
     return (
-        <div className="p-8 md:p-12 max-w-7xl mx-auto w-full relative">
+        <div className="p-8 md:p-12 max-w-7xl mx-auto w-full ">
             
             <header className="border-b border-neutral-200 pb-10 mb-8">
                 <h1 className="font-serif text-5xl tracking-tight text-neutral-900 mb-2">
@@ -84,7 +84,7 @@ export const Calendario = () => {
                 </p>
             </header>
 
-            <div className="bg-white border border-neutral-200 p-6 h-[700px] font-sans">
+            <div className="bg-white border border-neutral-200 p-2 md:p-6 h-[500px] md:h-[700px] font-sans overflow-x-auto">
                 <Calendar
                     localizer={localizer}
                     events={calendarEvents}

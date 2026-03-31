@@ -3,7 +3,7 @@ import { Sidebar } from "./Sidebar";
 
 export const MainLayout = () => {
     return(
-        <div className="flex min-h-screen bg-stone-50 font-sans text-neutral-900 selection:bg-neutral-900 selection:text-white">
+        <div className="lg:flex bg-stone-50 font-sans text-neutral-900 selection:bg-neutral-900 selection:text-white">
             {/* Sidebar */}
             <Sidebar/>
             {/* Main Content */}

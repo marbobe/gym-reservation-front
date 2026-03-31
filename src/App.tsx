@@ -8,9 +8,6 @@ import { Calendario } from "./pages/Calendario"
 import { Dashboard } from "./pages/Dashboard";
 
 
-//const Dashboard = () => <h1 className="text-2xl font-bold">Bienvenido al alquiler de espacios de Gimnasio</h1>;
-//const Calendario = () => <h1 className="text-2xl font-bold">Bienvenido al calendario de espacios de Gimnasio</h1>;
-
 function App(){
   return(
     <BrowserRouter>

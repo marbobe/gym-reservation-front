@@ -9,9 +9,9 @@ export const RoomCard = ({room}: {room: Room}) => {
 
     return (
 
-        <div className="bg-white border border-neutral-200 group relative flex flex-col block">
+        <div className="bg-white border border-neutral-200 group relative flex flex-col">
             {/* Imagen */}
-            <div className="relative h-72 w-full overflow-hidden bg-stone-100">
+            <div className="relative h-56 sm:h-72 w-full overflow-hidden bg-stone-100">
                 <img 
                     src={room.imageUrl} 
                     alt={`Fotografía de ${room.name}`} 
@@ -24,7 +24,7 @@ export const RoomCard = ({room}: {room: Room}) => {
             </div>
 
             {/* Contenido Tarjeta */}
-            <div className="p-8 flex flex-col flex-1">
+            <div className="p-6 sm:p-8 flex flex-col flex-1">
                 <div className="flex justify-between items-start mb-4">
 
                     <h3 className="font-serif text-3xl text-neutral-900 tracking-tight">{room.name}</h3>
@@ -42,7 +42,7 @@ export const RoomCard = ({room}: {room: Room}) => {
                 
                 {/* Zona de Botones */}
                 <div className="pt-6 border-t border-neutral-100 mt-auto">
-                    <div className="w-full flex">
+                    <div className="w-full flex flex-col sm:flex-row gap-4">
                         <Button variant="secondary" className="w-full mr-8" onClick={()=> navigate(`/rooms/${room.id}/edit`)}>Editar</Button>
                         
                         <Button disabled={room.status==='deleted'} variant="primary" className="w-full" onClick={()=> navigate(`/rooms/${room.id}/reserve`)}>Reservar</Button>
