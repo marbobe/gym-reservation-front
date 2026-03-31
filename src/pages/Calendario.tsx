@@ -26,7 +26,7 @@ const CALENDAR_MESSAGES = {
     time: "Hora", event: "Evento", noEventsInRange: "No hay reservas en este rango de fechas.",
 };
 
-const eventStyleGetter = (event: CalendarEvent, start: Date, end: Date, isSelected: boolean) => {
+const eventStyleGetter = (event: CalendarEvent, _start: Date, _end: Date, isSelected: boolean) => {
 
     let bgColor = '#404040';
 
