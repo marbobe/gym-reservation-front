@@ -45,3 +45,4 @@ Se ha seguido un enfoque de separación por capas de responsabilidad:
 1. Clona este repositorio.
 2. Instala las dependencias:```npm install```
 3. Inicia el servidor de desarrollo: ```npm run dev```
+4. Añadir archivo .env con: ```  VITE_API_URL=http://localhost:4000/api/v1 ```
