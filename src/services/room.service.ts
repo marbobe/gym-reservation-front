@@ -9,6 +9,7 @@ export const RoomService = {
 
     getById: async (id: string | number): Promise<Room> => {
         const response = await api.get<Room>(`/rooms/${id}`);
+        console.log("Respuesta real del backend (getById):", response.data);
         return response.data;
     },
 

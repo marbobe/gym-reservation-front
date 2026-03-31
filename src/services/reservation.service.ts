@@ -9,6 +9,8 @@ export const ReservationService = {
 
     getById: async (id:number|string): Promise<Reservation> => {
         const response = await api.get<Reservation>(`/reservations/${id}`);
+
+        console.log("Respuesta real del backend (getById):", response.data);
         return response.data;
     },
 
