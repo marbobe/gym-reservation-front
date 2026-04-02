@@ -4,6 +4,8 @@
 [![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)]()
 
 Este proyecto es el Frontend de una aplicación de reservas de gimnasio, construido con el objetivo de aprender a conectar una SPA (Single Page Application) con una API REST backend usando buenas prácticas.
+> **https://gymreservation.app/**
+
 
 > **⚠️ Importante:** Este proyecto requiere su respectiva API para funcionar. Puedes encontrar el código del Backend (Node.js + Prisma) en este repositorio: https://github.com/marbobe/gym-reservation-api
 
